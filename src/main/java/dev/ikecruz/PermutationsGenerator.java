@@ -6,8 +6,8 @@ public class PermutationsGenerator {
 
     public PermutationsGenerator(int size) {
         indices = new int[size];
-        for (int i = 0; i < size; i++) {
-            indices[i] = i;
+        for (int currentIndex = 0; currentIndex < size; currentIndex++) {
+            indices[currentIndex] = currentIndex;
         }
         hasMore = true;
     }
@@ -24,27 +24,27 @@ public class PermutationsGenerator {
         int[] result = indices.clone();
 
         // Find the rightmost element that is smaller than the element to its right
-        int i = indices.length - 2;
-        while (i >= 0 && indices[i] >= indices[i + 1]) {
-            i--;
+        int smallerRightNeighborIndex = indices.length - 2;
+        while (smallerRightNeighborIndex >= 0 && indices[smallerRightNeighborIndex] >= indices[smallerRightNeighborIndex + 1]) {
+            smallerRightNeighborIndex--;
         }
 
-        if (i < 0) {
+        if (smallerRightNeighborIndex < 0) {
             hasMore = false;
         } else {
             // Find the smallest element to the right of i and larger than i
-            int j = indices.length - 1;
-            while (indices[j] <= indices[i]) {
-                j--;
+            int largerRightNeighborIndex = indices.length - 1;
+            while (indices[largerRightNeighborIndex] <= indices[smallerRightNeighborIndex]) {
+                largerRightNeighborIndex--;
             }
 
             // Swap i and j
-            int temp = indices[i];
-            indices[i] = indices[j];
-            indices[j] = temp;
+            int temp = indices[smallerRightNeighborIndex];
+            indices[smallerRightNeighborIndex] = indices[largerRightNeighborIndex];
+            indices[largerRightNeighborIndex] = temp;
 
             // Reverse the elements to the right of i
-            int left = i + 1;
+            int left = smallerRightNeighborIndex + 1;
             int right = indices.length - 1;
             while (left < right) {
                 temp = indices[left];

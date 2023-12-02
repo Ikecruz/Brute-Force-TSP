@@ -9,6 +9,20 @@ import java.util.ArrayList;
 
 public class Main {
 
+    static final String FILENAME = "test-files/train1.txt";
+    // static final String FILENAME = "test-files/train2.txt";
+    // static final String FILENAME = "test-files/train3.txt";
+    // static final String FILENAME = "test-files/sample1-22.txt";
+    // static final String FILENAME = "test-files/sample2-22.txt";
+    // static final String FILENAME = "test-files/sample3-22.txt";
+    // static final String FILENAME = "test-files/sample4-22.txt";
+
+    /**
+     * The function reads city data from a file, parses it, and returns an ArrayList of City objects.
+     * 
+     * @param filePath The filePath parameter is a String that represents the path to the file with cities.
+     * @return The method is returning an ArrayList of City objects.
+     */
     public static ArrayList<City> readCitiesFromFile(String filePath) throws IOException, FileNotFoundException {
 
         ArrayList<City> cities = new ArrayList<>();
@@ -22,12 +36,11 @@ public class Main {
         while ((line = bufferedReader.readLine()) != null) {
             String[] lineDivided = line.replaceAll("[\t ]+", " ").trim().split(" ");
             
-            int id = Integer.parseInt(lineDivided[0]);
-            int x = Integer.parseInt(lineDivided[1]);
-            int y = Integer.parseInt(lineDivided[2]);
+            int cityId = Integer.parseInt(lineDivided[0]);
+            int cityXCoordinate = Integer.parseInt(lineDivided[1]);
+            int cityYCoordinate = Integer.parseInt(lineDivided[2]);
 
-            cities.add(new City(id, x, y));
-
+            cities.add(new City(cityId, cityXCoordinate, cityYCoordinate));
         }
 
         bufferedReader.close();
@@ -35,17 +48,23 @@ public class Main {
         return cities;
     }
 
-    public static double euclideanDistance (City city1, City city2) {
-        int differenceOfX = city1.x - city2.x;
-        int differenceOfY = city1.y- city2.y;
+    /**
+     * The function calculates the Euclidean distance between two cities based on their coordinates.
+     * 
+     * @param city1 The first city object, which contains the x and y coordinates of the city.
+     * @param city2 The second city object, which contains the x and y coordinates of the second city.
+     * @return The method is returning the Euclidean distance between two cities.
+     */
+    public static double calculateEuclideanDistance (City city1, City city2) {
+        int differenceOfXCoordinates = city1.xCoordinate - city2.xCoordinate;
+        int differenceOfYCoordinates = city1.yCoordinate- city2.yCoordinate;
 
-        return Math.sqrt((differenceOfX * differenceOfX) + (differenceOfY * differenceOfY));
+        return Math.sqrt((differenceOfXCoordinates * differenceOfXCoordinates) + (differenceOfYCoordinates * differenceOfYCoordinates));
     }
 
     /**
      * The function calculates the total distance of a given path by summing up the Euclidean distances
-     * between consecutive cities in the path and also accounting for the distance between the last
-     * city and the first city.
+     * between consecutive cities.
      * 
      * @param path An ArrayList of City objects representing a path or route.
      * @return The method is returning the total distance of the given path, which is a double value.
@@ -53,17 +72,24 @@ public class Main {
     public static double calculatePathDistance (ArrayList<City> path) {
         double totalDistance = 0;
 
+        // calculating the distance between two consecutive ignoring the last city
         for (int index = 0; index < path.size() - 1; index++) {
-            totalDistance += euclideanDistance(path.get(index), path.get(index + 1));
+            totalDistance += calculateEuclideanDistance(path.get(index), path.get(index + 1));
         }
 
-        // MOVE BACK TO START POINT
-        totalDistance += euclideanDistance(path.get(path.size() - 1), path.get(0));
+        // Move back to the starting city from the last the city
+        totalDistance += calculateEuclideanDistance(path.get(path.size() - 1), path.get(0));
 
         return totalDistance;
 
     }
 
+    /**
+     * The function calculates the shortest path and distance for a given list of cities using the
+     * brute force approach of generating all possible permutations.
+     * 
+     * @param cities This is an ArrayList of City objects representing cities to be visited. 
+     */
     public static void travellingSalesman (ArrayList<City> cities) {
         ArrayList<City> bestPath = null;
         double shortestDistance = Double.MAX_VALUE;
@@ -87,14 +113,14 @@ public class Main {
         
         System.out.println("Shortest Path:");
         for (City city : bestPath) {
-            System.out.println(city.number + " (" + city.x + ", " + city.y + ")");
+            System.out.println(city.id + " (" + city.xCoordinate + ", " + city.yCoordinate + ")");
         }
         System.out.println("Total Distance: " + shortestDistance);
 
     }
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        ArrayList<City> cities = readCitiesFromFile("test-files/train1.txt");
+        ArrayList<City> cities = readCitiesFromFile(FILENAME);
         long start = System.nanoTime();
         travellingSalesman(cities);
         long stop = System.nanoTime();

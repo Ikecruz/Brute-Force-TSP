@@ -1,13 +1,13 @@
 package dev.ikecruz;
 
 public class City {
-    int number;
-    int x;
-    int y;
+    int id;
+    int xCoordinate;
+    int yCoordinate;
 
-    public City(int number, int x, int y) {
-        this.number = number;
-        this.x = x;
-        this.y = y;
+    public City(int id, int xCoordinate, int yCoordinate) {
+        this.id = id;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
     }
 }
