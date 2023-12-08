@@ -7,6 +7,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The Main class for the Traveling Salesman Problem solution.
+ * This program addresses the Traveling Salesman Problem, where the goal is to find
+ * the shortest possible path that visits each city exactly once and returns to the starting city.
+ * 
+ * The solution is obtained using a brute-force approach that generates all possible permutations
+ * of cities and calculates the distance for each permutation.
+ * The result, including the shortest path and its distance, is then outputted along with the runtime.
+ *
+ * Note: This program assumes the input file format is structured with each line representing a city
+ * and containing the city number, X-coordinate, and Y-coordinate separated by spaces or tabs.
+ *
+ * @author Onyeka Ikedinobi
+ * @version 1.0
+ */
 public class Main {
 
     static final String FILENAME = "test-files/train1.txt";
@@ -22,6 +37,8 @@ public class Main {
      * 
      * @param filePath The filePath parameter is a String that represents the path to the file with cities.
      * @return The method is returning an ArrayList of City objects.
+     * @throws IOException        If an I/O error occurs while reading the file.
+     * @throws FileNotFoundException If the specified file is not found.
      */
     public static ArrayList<City> readCitiesFromFile(String filePath) throws IOException, FileNotFoundException {
 
@@ -34,11 +51,11 @@ public class Main {
         String line;
 
         while ((line = bufferedReader.readLine()) != null) {
-            String[] lineDivided = line.replaceAll("[\t ]+", " ").trim().split(" ");
+            String[] lineParts = line.replaceAll("[\t ]+", " ").trim().split(" ");
             
-            int cityId = Integer.parseInt(lineDivided[0]);
-            int cityXCoordinate = Integer.parseInt(lineDivided[1]);
-            int cityYCoordinate = Integer.parseInt(lineDivided[2]);
+            int cityId = Integer.parseInt(lineParts[0]);
+            int cityXCoordinate = Integer.parseInt(lineParts[1]);
+            int cityYCoordinate = Integer.parseInt(lineParts[2]);
 
             cities.add(new City(cityId, cityXCoordinate, cityYCoordinate));
         }
@@ -77,7 +94,7 @@ public class Main {
             totalDistance += calculateEuclideanDistance(path.get(index), path.get(index + 1));
         }
 
-        // Move back to the starting city from the last the city
+        // Move back to the starting city from the last city
         totalDistance += calculateEuclideanDistance(path.get(path.size() - 1), path.get(0));
 
         return totalDistance;
